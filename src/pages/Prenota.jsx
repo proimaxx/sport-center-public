@@ -59,7 +59,10 @@ export default function Prenota() {
     const d = new Date(data + 'T00:00:00')
     d.setDate(d.getDate() + delta)
     const newData = d.toISOString().split('T')[0]
-    if (newData >= oggi()) setData(newData)
+    const max = new Date()
+    max.setDate(max.getDate() + (config.giorniPrenotabili || 3))
+    const maxStr = max.toISOString().split('T')[0]
+    if (newData >= oggi() && newData <= maxStr) setData(newData)
   }
 
   const isSlotOccupato = (campoId, slot, durata) => {
@@ -122,7 +125,7 @@ export default function Prenota() {
 
   const durata = tipoPartita === 'singolo' ? (config.slotSingolo || 60) : (config.slotDoppio || 90)
   const numGiocatori = tipoPartita === 'singolo' ? 2 : 4
-  const campiFiltrati = filtroSport === 'tutti' ? campi : campi.filter(c => c.sport === filtroSport)
+  const campiFiltrati = (filtroSport === 'tutti' ? campi : campi.filter(c => c.sport === filtroSport)).sort((a, b) => a.nome.localeCompare(b.nome, 'it', { numeric: true }))
 
   const maxData = (() => {
     const d = new Date()
@@ -150,13 +153,30 @@ export default function Prenota() {
         </div>
       )}
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: '1.25rem' }}>
-        <button onClick={() => changeDay(-1)} style={{ padding: '6px 14px', fontSize: 16 }}>←</button>
-        <div style={{ flex: 1, textAlign: 'center', fontWeight: 500 }}>{fmtData(data)}</div>
-        <button onClick={() => changeDay(1)} style={{ padding: '6px 14px', fontSize: 16 }}>→</button>
-        <input type="date" value={data} min={oggi()} max={maxData}
-          onChange={e => setData(e.target.value)}
-          style={{ width: 'auto', padding: '6px 10px' }} />
+      <div style={{ display: 'flex', gap: 8, marginBottom: '1.25rem' }}>
+        {[0, 1, 2].map(delta => {
+          const d = new Date()
+          d.setDate(d.getDate() + delta)
+          const dateStr = d.toISOString().split('T')[0]
+          const labels = ['Oggi', 'Domani', 'Dopodomani']
+          const isSelected = data === dateStr
+          return (
+            <button key={delta} onClick={() => setData(dateStr)}
+              style={{
+                flex: 1, padding: '12px 8px', borderRadius: 10, fontSize: 14,
+                fontWeight: isSelected ? 500 : 400,
+                background: isSelected ? '#1D9E75' : 'white',
+                color: isSelected ? 'white' : '#444',
+                border: isSelected ? 'none' : '0.5px solid #e0e0dc',
+                cursor: 'pointer'
+              }}>
+              <div>{labels[delta]}</div>
+              <div style={{ fontSize: 12, opacity: 0.8, marginTop: 2 }}>
+                {d.toLocaleDateString('it-IT', { weekday: 'short', day: 'numeric', month: 'short' })}
+              </div>
+            </button>
+          )
+        })}
       </div>
 
       {!sportParam && (

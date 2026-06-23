@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { db, dbAdmin, auth } from '../firebase/config'
 import {
   doc, getDoc, onSnapshot, addDoc,
@@ -18,6 +19,7 @@ const isFestivo = (d) => {
 
 export default function Piscina() {
   const user = useAuth()
+  const navigate = useNavigate()
   const [data, setData] = useState(oggi())
   const [config, setConfig] = useState({ postiMax: 50, prezzoGiornalieroFeriale: 10, prezzoGiornalieroFestivo: 14, prezzoMezzaFeriale: 7, prezzoMezzaFestivo: 10 })
   const [prenotazioni, setPrenotazioni] = useState([])
@@ -88,6 +90,10 @@ export default function Piscina() {
 
   return (
     <div style={{ maxWidth: 600, margin: '0 auto', padding: '1.5rem 1rem' }}>
+      <button onClick={() => navigate('/')}
+        style={{ marginBottom: '1.25rem', background: 'white', border: '0.5px solid #e0e0dc', color: '#1a1a1a', fontSize: 14, padding: '9px 16px', borderRadius: 8, display: 'flex', alignItems: 'center', gap: 8, fontWeight: 500, cursor: 'pointer' }}>
+        ← Torna alla home
+      </button>
 
       {success && (
         <div style={{ background: '#EAF3DE', border: '0.5px solid #97C459', borderRadius: 12, padding: '1rem 1.25rem', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: 12 }}>
