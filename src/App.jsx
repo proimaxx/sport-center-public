@@ -3,7 +3,9 @@ import './styles/global.css'
 import { AuthProvider, useAuth } from './hooks/useAuth'
 import Header from './components/Header'
 import Auth from './pages/Auth'
+import Home from './pages/Home'
 import Prenota from './pages/Prenota'
+import Piscina from './pages/Piscina'
 import MiePrenotazioni from './pages/MiePrenotazioni'
 
 function PrivateRoute({ children }) {
@@ -18,7 +20,9 @@ function AppRoutes() {
       {user && <Header />}
       <Routes>
         <Route path="/login" element={user ? <Navigate to="/" replace /> : <Auth />} />
-        <Route path="/" element={<PrivateRoute><Prenota /></PrivateRoute>} />
+        <Route path="/" element={<PrivateRoute><Home /></PrivateRoute>} />
+        <Route path="/prenota" element={<PrivateRoute><Prenota /></PrivateRoute>} />
+        <Route path="/piscina" element={<PrivateRoute><Piscina /></PrivateRoute>} />
         <Route path="/prenotazioni" element={<PrivateRoute><MiePrenotazioni /></PrivateRoute>} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

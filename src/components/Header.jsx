@@ -23,13 +23,10 @@ export default function Header() {
         <span style={{ fontWeight: 500, fontSize: 16 }}>Sport Center</span>
       </div>
       {user && (
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <span
-            style={{ fontSize: 13, color: '#666', cursor: 'pointer' }}
-            onClick={() => navigate('/prenotazioni')}
-          >
-            Le mie prenotazioni
-          </span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+          <span style={{ fontSize: 13, color: '#666', cursor: 'pointer' }} onClick={() => navigate('/')}>Campi</span>
+          <span style={{ fontSize: 13, color: '#666', cursor: 'pointer' }} onClick={() => navigate('/piscina')}>🏊 Piscina</span>
+          <span style={{ fontSize: 13, color: '#666', cursor: 'pointer' }} onClick={() => navigate('/prenotazioni')}>Le mie prenotazioni</span>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <div style={{
               width: 32, height: 32, borderRadius: '50%',
