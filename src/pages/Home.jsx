@@ -92,11 +92,50 @@ const PiscinaCourt = () => {
   )
 }
 
+const CalcioA5Court = () => (
+  <svg viewBox="0 0 260 160" style={{ width: '100%', height: 140 }}>
+    <rect width="260" height="160" fill="#2E7D32" rx="4"/>
+    <rect x="12" y="10" width="236" height="140" fill="#1B5E20" rx="2"/>
+    <rect x="12" y="10" width="236" height="140" fill="none" stroke="white" strokeWidth="2"/>
+    <circle cx="130" cy="80" r="20" fill="none" stroke="white" strokeWidth="1.5"/>
+    <circle cx="130" cy="80" r="2" fill="white"/>
+    <line x1="130" y1="10" x2="130" y2="150" stroke="white" strokeWidth="2"/>
+    <rect x="12" y="55" width="22" height="50" fill="none" stroke="white" strokeWidth="1.5"/>
+    <rect x="226" y="55" width="22" height="50" fill="none" stroke="white" strokeWidth="1.5"/>
+    <rect x="12" y="40" width="45" height="80" fill="none" stroke="white" strokeWidth="1.5"/>
+    <rect x="203" y="40" width="45" height="80" fill="none" stroke="white" strokeWidth="1.5"/>
+  </svg>
+)
+
+const CentriEstiviCourt = () => (
+  <svg viewBox="0 0 260 160" style={{ width: '100%', height: 140 }}>
+    <rect width="260" height="160" fill="#F57C00" rx="4"/>
+    <rect x="12" y="10" width="236" height="140" fill="#E65100" rx="2"/>
+    <circle cx="130" cy="55" r="28" fill="#FFB300"/>
+    <line x1="130" y1="20" x2="130" y2="10" stroke="#FFD54F" strokeWidth="2.5"/>
+    <line x1="155" y1="30" x2="162" y2="23" stroke="#FFD54F" strokeWidth="2.5"/>
+    <line x1="165" y1="55" x2="175" y2="55" stroke="#FFD54F" strokeWidth="2.5"/>
+    <line x1="105" y1="30" x2="98" y2="23" stroke="#FFD54F" strokeWidth="2.5"/>
+    <line x1="95" y1="55" x2="85" y2="55" stroke="#FFD54F" strokeWidth="2.5"/>
+    <rect x="50" y="95" width="40" height="55" fill="#1565C0" rx="2"/>
+    <rect x="65" y="110" width="12" height="40" fill="#0D47A1" rx="1"/>
+    <polygon points="50,95 70,72 90,95" fill="#E53935"/>
+    <rect x="120" y="100" width="35" height="50" fill="#1565C0" rx="2"/>
+    <rect x="133" y="115" width="10" height="35" fill="#0D47A1" rx="1"/>
+    <polygon points="120,100 137,80 155,100" fill="#E53935"/>
+    <rect x="175" y="105" width="38" height="45" fill="#1565C0" rx="2"/>
+    <rect x="188" y="118" width="10" height="32" fill="#0D47A1" rx="1"/>
+    <polygon points="175,105 194,85 213,105" fill="#E53935"/>
+  </svg>
+)
+
 const sezioni = [
   { sport: 'tennis', label: 'Tennis', descrizione: 'Prenota un campo da tennis', bg: '#C1440E', Court: TennisCourt, path: '/prenota?sport=tennis' },
   { sport: 'padel', label: 'Padel', descrizione: 'Prenota un campo da padel', bg: '#2E7D32', Court: PadelCourt, path: '/prenota?sport=padel' },
   { sport: 'pickleball', label: 'Pickleball', descrizione: 'Prenota un campo da pickleball', bg: '#1565C0', Court: PickleballCourt, path: '/prenota?sport=pickleball' },
+  { sport: 'calcio5', label: 'Calcio a 5', descrizione: 'Prenota un campo da calcio a 5', bg: '#1B5E20', Court: CalcioA5Court, path: '/prenota?sport=calcio5' },
   { sport: 'piscina', label: 'Piscina', descrizione: 'Prenota il tuo posto in piscina', bg: '#0288D1', Court: PiscinaCourt, path: '/piscina' },
+  { sport: 'estivi', label: 'Centri estivi', descrizione: 'Iscrizione settimanale o giornaliera', bg: '#E65100', Court: CentriEstiviCourt, path: '/estivi' },
 ]
 
 export default function Home() {
