@@ -62,7 +62,7 @@ input:focus, select:focus { border-color: var(--blue); }
 }
 
 .btn-primary {
-  background: var(--green);
+  background: #1D9E75;
   color: white;
   border: none;
   font-weight: 500;
@@ -70,8 +70,13 @@ input:focus, select:focus { border-color: var(--blue); }
   border-radius: var(--radius-sm);
   width: 100%;
   font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
 }
-.btn-primary:hover { background: var(--green-dark); }
+.btn-primary:hover { background: #0F6E56; }
 
 .btn-secondary {
   background: white;

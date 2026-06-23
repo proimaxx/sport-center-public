@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useSearchParams, useNavigate } from 'react-router-dom'
 import { subscribeCampi, subscribePrenotazioniByData, addPrenotazione, getConfig } from '../firebase/services'
 import { useAuth } from '../hooks/useAuth'
 
@@ -31,7 +32,10 @@ export default function Prenota() {
   const [campi, setCampi] = useState([])
   const [prenotazioni, setPrenotazioni] = useState([])
   const [config, setConfig] = useState({ oraApertura: '08:00', oraChiusura: '22:00', giorniPrenotabili: 3, slotSingolo: 60, slotDoppio: 90 })
-  const [filtroSport, setFiltroSport] = useState('tutti')
+  const [searchParams] = useSearchParams()
+  const navigate = useNavigate()
+  const sportParam = searchParams.get('sport')
+  const [filtroSport, setFiltroSport] = useState(sportParam || 'tutti')
   const [selected, setSelected] = useState(null)
   const [tipoPartita, setTipoPartita] = useState('singolo')
   const [loading, setLoading] = useState(false)
@@ -123,6 +127,12 @@ export default function Prenota() {
 
   return (
     <div style={{ maxWidth: 800, margin: '0 auto', padding: '1.5rem 1rem' }}>
+      {sportParam && (
+        <button onClick={() => navigate('/')}
+          style={{ marginBottom: '1.25rem', background: 'white', border: '0.5px solid #e0e0dc', color: '#1a1a1a', fontSize: 14, padding: '9px 16px', borderRadius: 8, display: 'flex', alignItems: 'center', gap: 8, fontWeight: 500, cursor: 'pointer' }}>
+          ← Torna alla home
+        </button>
+      )}
 
       {success && (
         <div style={{ background: '#EAF3DE', border: '0.5px solid #97C459', borderRadius: 12, padding: '1rem 1.25rem', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: 12 }}>
@@ -144,6 +154,7 @@ export default function Prenota() {
           style={{ width: 'auto', padding: '6px 10px' }} />
       </div>
 
+      {!sportParam && (
       <div style={{ display: 'flex', gap: 8, marginBottom: '1.25rem', flexWrap: 'wrap' }}>
         {['tutti', 'tennis', 'padel', 'pickleball'].map(s => (
           <button key={s} onClick={() => setFiltroSport(s)}
@@ -158,6 +169,7 @@ export default function Prenota() {
           </button>
         ))}
       </div>
+      )}
 
       <div style={{ display: 'flex', gap: 8, marginBottom: '1.25rem' }}>
         {['singolo', 'doppio'].map(t => (
