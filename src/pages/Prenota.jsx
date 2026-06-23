@@ -40,6 +40,7 @@ export default function Prenota() {
   const [tipoPartita, setTipoPartita] = useState('singolo')
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
+  const [giocatori, setGiocatori] = useState(['', ''])
 
   useEffect(() => {
     const unsub = subscribeCampi(setCampi)
@@ -89,12 +90,15 @@ export default function Prenota() {
     setLoading(true)
     const campo = campi.find(c => c.id === selected.campoId)
     const durata = tipoPartita === 'singolo' ? (config.slotSingolo || 60) : (config.slotDoppio || 90)
+  const numGiocatori = tipoPartita === 'singolo' ? 2 : 4
     const prezzo = tipoPartita === 'singolo' ? campo.prezzoSingolo : campo.prezzoDoppio
     const [sh, sm] = selected.slot.split(':').map(Number)
     const fineMin = sh * 60 + sm + durata
     const orarioFine = `${String(Math.floor(fineMin / 60)).padStart(2, '0')}:${String(fineMin % 60).padStart(2, '0')}`
     try {
       await addPrenotazione({
+        giocatori: giocatori.filter(g => g.trim()),
+
         uid: user.uid,
         clienteNome: user.displayName,
         clienteEmail: user.email,
@@ -117,6 +121,7 @@ export default function Prenota() {
   }
 
   const durata = tipoPartita === 'singolo' ? (config.slotSingolo || 60) : (config.slotDoppio || 90)
+  const numGiocatori = tipoPartita === 'singolo' ? 2 : 4
   const campiFiltrati = filtroSport === 'tutti' ? campi : campi.filter(c => c.sport === filtroSport)
 
   const maxData = (() => {
@@ -251,6 +256,21 @@ export default function Prenota() {
                 ? campi.find(c => c.id === selected.campoId)?.prezzoSingolo
                 : campi.find(c => c.id === selected.campoId)?.prezzoDoppio)?.toFixed(2)} in loco
             </div>
+          </div>
+          <div style={{ padding: '12px 14px', background: 'white', borderTop: '0.5px solid #e0e0dc' }}>
+            <div style={{ fontSize: 13, color: '#666', marginBottom: 8 }}>
+              Giocatori ({numGiocatori} {numGiocatori === 2 ? 'persone' : 'persone'})
+            </div>
+            {Array.from({ length: numGiocatori }).map((_, i) => (
+              <input key={i} placeholder={`Giocatore ${i + 1}${i === 0 ? ' (tu)' : ''}`}
+                value={giocatori[i] || ''}
+                onChange={e => {
+                  const g = [...giocatori]
+                  g[i] = e.target.value
+                  setGiocatori(g)
+                }}
+                style={{ marginBottom: 8 }} />
+            ))}
           </div>
           <button className="btn-primary" onClick={handleConferma} disabled={loading}
             style={{ width: 'auto', padding: '10px 24px' }}>
