@@ -84,10 +84,13 @@ export default function Piscina() {
     if (!postiDisponibili) return
     setLoading(true)
     try {
+      const userDoc = await import('firebase/firestore').then(m => m.getDoc(m.doc(db, 'utenti', user.uid)))
+      const telefono = userDoc.exists() ? userDoc.data().telefono || '' : ''
       await addDoc(collection(db, 'prenotazioniPiscina'), {
         uid: user.uid,
         clienteNome: user.displayName,
         clienteEmail: user.email,
+        clienteTelefono: telefono,
         data,
         tipoIngresso,
         persone,
