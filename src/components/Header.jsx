@@ -14,7 +14,7 @@ export default function Header() {
   return (
     <header style={{
       background: 'white', borderBottom: '0.5px solid #e0e0dc',
-      padding: '0 1.5rem', height: 56,
+      padding: '0 1rem', height: 56,
       display: 'flex', alignItems: 'center', justifyContent: 'space-between',
       position: 'sticky', top: 0, zIndex: 10
     }}>
@@ -23,21 +23,25 @@ export default function Header() {
         <span style={{ fontWeight: 500, fontSize: 16 }}>Sport Center</span>
       </div>
       {user && (
-        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-          <span style={{ fontSize: 13, color: '#666', cursor: 'pointer' }} onClick={() => navigate('/')}>Campi</span>
-          <span style={{ fontSize: 13, color: '#666', cursor: 'pointer' }} onClick={() => navigate('/piscina')}>🏊 Piscina</span>
-          <span style={{ fontSize: 13, color: '#666', cursor: 'pointer' }} onClick={() => navigate('/prenotazioni')}>Le mie prenotazioni</span>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <div style={{
-              width: 32, height: 32, borderRadius: '50%',
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <button onClick={() => navigate('/prenotazioni')}
+            style={{
+              display: 'flex', alignItems: 'center', gap: 6,
+              padding: '7px 12px', borderRadius: 8, fontSize: 13,
               background: '#E6F1FB', color: '#0C447C',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: 13, fontWeight: 500
+              border: '0.5px solid #85B7EB', fontWeight: 500, cursor: 'pointer'
             }}>
-              {user.displayName?.charAt(0).toUpperCase() || '?'}
-            </div>
-            <button onClick={handleEsci} style={{ fontSize: 13, padding: '5px 12px' }}>Esci</button>
-          </div>
+            📋 Prenotazioni
+          </button>
+          <button onClick={() => navigate('/account')}
+            style={{
+              display: 'flex', alignItems: 'center', gap: 6,
+              padding: '7px 12px', borderRadius: 8, fontSize: 13,
+              background: '#f5f5f3', color: '#444',
+              border: '0.5px solid #e0e0dc', fontWeight: 500, cursor: 'pointer'
+            }}>
+            👤 Account
+          </button>
         </div>
       )}
     </header>

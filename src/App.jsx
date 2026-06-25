@@ -8,6 +8,7 @@ import Prenota from './pages/Prenota'
 import Piscina from './pages/Piscina'
 import Estivi from './pages/Estivi'
 import MiePrenotazioni from './pages/MiePrenotazioni'
+import Account from './pages/Account'
 
 function PrivateRoute({ children }) {
   const user = useAuth()
@@ -26,6 +27,7 @@ function AppRoutes() {
         <Route path="/piscina" element={<PrivateRoute><Piscina /></PrivateRoute>} />
         <Route path="/estivi" element={<PrivateRoute><Estivi /></PrivateRoute>} />
         <Route path="/prenotazioni" element={<PrivateRoute><MiePrenotazioni /></PrivateRoute>} />
+        <Route path="/account" element={<PrivateRoute><Account /></PrivateRoute>} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </>
