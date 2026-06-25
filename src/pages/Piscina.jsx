@@ -12,9 +12,46 @@ const fmtData = (d) => {
   const date = new Date(d + 'T00:00:00')
   return date.toLocaleDateString('it-IT', { weekday: 'long', day: 'numeric', month: 'long' })
 }
+const getEaster = (year) => {
+  const a = year % 19
+  const b = Math.floor(year / 100)
+  const c = year % 100
+  const d = Math.floor(b / 4)
+  const e = b % 4
+  const f = Math.floor((b + 8) / 25)
+  const g = Math.floor((b - f + 1) / 3)
+  const h = (19 * a + b - d - g + 15) % 30
+  const i = Math.floor(c / 4)
+  const k = c % 4
+  const l = (32 + 2 * e + 2 * i - h - k) % 7
+  const m = Math.floor((a + 11 * h + 22 * l) / 451)
+  const month = Math.floor((h + l - 7 * m + 114) / 31)
+  const day = ((h + l - 7 * m + 114) % 31) + 1
+  return new Date(year, month - 1, day)
+}
+
 const isFestivo = (d) => {
-  const day = new Date(d + 'T00:00:00').getDay()
-  return day === 0 || day === 6
+  const date = new Date(d + 'T00:00:00')
+  const day = date.getDay()
+  const year = date.getFullYear()
+  const mm = String(date.getMonth() + 1).padStart(2, '0')
+  const dd = String(date.getDate()).padStart(2, '0')
+  const mmdd = `${mm}-${dd}`
+
+  if (day === 0 || day === 6) return true
+
+  const nazionali = ['01-01','01-06','04-25','05-01','06-02','08-15','11-01','12-08','12-25','12-26']
+  if (nazionali.includes(mmdd)) return true
+
+  if (mmdd === '06-29') return true
+
+  const pasqua = getEaster(year)
+  const pasquetta = new Date(pasqua)
+  pasquetta.setDate(pasqua.getDate() + 1)
+  const formatDate = (dt) => `${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')}`
+  if (mmdd === formatDate(pasqua) || mmdd === formatDate(pasquetta)) return true
+
+  return false
 }
 
 export default function Piscina() {
@@ -127,22 +164,42 @@ export default function Piscina() {
       <h1 style={{ marginBottom: '1.5rem' }}>🏊 Piscina</h1>
 
       {/* Navigazione data */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: '1.25rem' }}>
-        <button onClick={() => changeDay(-1)} style={{ padding: '6px 14px', fontSize: 16 }}>←</button>
-        <div style={{ flex: 1, textAlign: 'center' }}>
-          <div style={{ fontWeight: 500 }}>{fmtData(data)}</div>
-          <span style={{
-            background: festivo ? '#FAEEDA' : '#E6F1FB',
-            color: festivo ? '#633806' : '#0C447C',
-            borderRadius: 99, padding: '2px 8px', fontSize: 11, fontWeight: 500
-          }}>
-            {festivo ? 'Festivo' : 'Feriale'}
-          </span>
-        </div>
-        <button onClick={() => changeDay(1)} style={{ padding: '6px 14px', fontSize: 16 }}>→</button>
+      <div style={{ display: 'flex', gap: 8, marginBottom: '1rem', alignItems: 'center' }}>
+        {[0, 1, 2].map(delta => {
+          const d = new Date()
+          d.setDate(d.getDate() + delta)
+          const dateStr = d.toISOString().split('T')[0]
+          const labels = ['Oggi', 'Domani', 'Dopodomani']
+          const isSelected = data === dateStr
+          return (
+            <button key={delta} onClick={() => setData(dateStr)}
+              style={{
+                flex: 1, padding: '8px 6px', borderRadius: 8, fontSize: 13,
+                fontWeight: isSelected ? 500 : 400,
+                background: isSelected ? '#1D9E75' : 'white',
+                color: isSelected ? 'white' : '#444',
+                border: isSelected ? 'none' : '0.5px solid #e0e0dc',
+                cursor: 'pointer', textAlign: 'center'
+              }}>
+              <div>{labels[delta]}</div>
+              <div style={{ fontSize: 11, opacity: 0.8, marginTop: 2 }}>
+                {d.toLocaleDateString('it-IT', { weekday: 'short', day: 'numeric', month: 'short' })}
+              </div>
+            </button>
+          )
+        })}
         <input type="date" value={data} min={oggi()}
           onChange={e => setData(e.target.value)}
           style={{ width: 'auto', padding: '6px 10px' }} />
+      </div>
+      <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
+        <span style={{
+          background: festivo ? '#FAEEDA' : '#E6F1FB',
+          color: festivo ? '#633806' : '#0C447C',
+          borderRadius: 99, padding: '3px 12px', fontSize: 12, fontWeight: 500
+        }}>
+          {festivo ? '🎉 Festivo' : 'Feriale'} · {fmtData(data)}
+        </span>
       </div>
 
       {/* Disponibilità */}
