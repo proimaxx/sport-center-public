@@ -21,7 +21,14 @@ export default function Piscina() {
   const user = useAuth()
   const navigate = useNavigate()
   const [data, setData] = useState(oggi())
-  const [config, setConfig] = useState({ postiMax: 50, prezzoGiornalieroFeriale: 10, prezzoGiornalieroFestivo: 14, prezzoMezzaFeriale: 7, prezzoMezzaFestivo: 10 })
+  const [config, setConfig] = useState({
+    postiMax: 50,
+    prezzoGiornalieroFeriale: 10, prezzoGiornalieroFestivo: 14,
+    prezzoMattinaFeriale: 6, prezzoMattinaFestivo: 8,
+    prezzoPomeriggioFeriale: 6, prezzoPomeriggioFestivo: 8,
+    prezzoMezzaFeriale: 7, prezzoMezzaFestivo: 10,
+    prezzoRidottoFeriale: 5, prezzoRidottoFestivo: 7,
+  })
   const [prenotazioni, setPrenotazioni] = useState([])
   const [tipoIngresso, setTipoIngresso] = useState('giornaliero')
   const [persone, setPersone] = useState(1)
@@ -51,9 +58,16 @@ export default function Piscina() {
   const postiOccupati = prenotazioni.reduce((acc, p) => acc + (p.persone || 1), 0)
   const postiLiberi = config.postiMax - postiOccupati
 
-  const prezzo = festivo
-    ? (tipoIngresso === 'giornaliero' ? config.prezzoGiornalieroFestivo : config.prezzoMezzaFestivo)
-    : (tipoIngresso === 'giornaliero' ? config.prezzoGiornalieroFeriale : config.prezzoMezzaFeriale)
+  const getPrezzo = (tipo, fest) => {
+    switch(tipo) {
+      case 'giornaliero': return fest ? config.prezzoGiornalieroFestivo : config.prezzoGiornalieroFeriale
+      case 'mattina': return fest ? config.prezzoMattinaFestivo : config.prezzoMattinaFeriale
+      case 'pomeriggio': return fest ? config.prezzoPomeriggioFestivo : config.prezzoPomeriggioFeriale
+      case 'ridotto': return fest ? config.prezzoRidottoFestivo : config.prezzoRidottoFeriale
+      default: return fest ? config.prezzoMezzaFestivo : config.prezzoMezzaFeriale
+    }
+  }
+  const prezzo = getPrezzo(tipoIngresso, festivo)
 
   const totale = prezzo * persone
   const postiDisponibili = postiLiberi >= persone
@@ -148,21 +162,26 @@ export default function Piscina() {
           {/* Tipo ingresso */}
           <div style={{ marginBottom: '1rem' }}>
             <div style={{ fontSize: 13, color: '#666', marginBottom: 8 }}>Tipo di ingresso</div>
-            <div style={{ display: 'flex', gap: 8 }}>
-              {['giornaliero', 'mezza'].map(t => (
+            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+              {[
+                ['giornaliero', '☀️ Giornaliero'],
+                ['mattina', '🌅 Mattina'],
+                ['pomeriggio', '🌇 Pomeriggio'],
+                ['mezza', '🌤 Mezza giornata'],
+                ['ridotto', '👶 Ridotto'],
+              ].map(([t, label]) => (
                 <button key={t} onClick={() => setTipoIngresso(t)}
                   style={{
-                    flex: 1, padding: '10px', borderRadius: 8, fontSize: 13,
+                    padding: '8px 10px', borderRadius: 8, fontSize: 12,
                     fontWeight: tipoIngresso === t ? 500 : 400,
                     background: tipoIngresso === t ? '#E6F1FB' : 'white',
                     color: tipoIngresso === t ? '#0C447C' : '#666',
-                    borderColor: tipoIngresso === t ? '#85B7EB' : '#e0e0dc',
+                    border: tipoIngresso === t ? '1.5px solid #85B7EB' : '0.5px solid #e0e0dc',
+                    cursor: 'pointer'
                   }}>
-                  {t === 'giornaliero' ? '☀️ Giornaliero' : '🌤 Mezza giornata'}
-                  <div style={{ fontSize: 12, marginTop: 2 }}>
-                    €{t === 'giornaliero'
-                      ? (festivo ? config.prezzoGiornalieroFestivo : config.prezzoGiornalieroFeriale)
-                      : (festivo ? config.prezzoMezzaFestivo : config.prezzoMezzaFeriale)}/persona
+                  {label}
+                  <div style={{ fontSize: 11, marginTop: 2 }}>
+                    €{getPrezzo(t, festivo)}/persona
                   </div>
                 </button>
               ))}
