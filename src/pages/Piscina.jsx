@@ -64,6 +64,7 @@ export default function Piscina() {
       case 'mattina': return fest ? config.prezzoMattinaFestivo : config.prezzoMattinaFeriale
       case 'pomeriggio': return fest ? config.prezzoPomeriggioFestivo : config.prezzoPomeriggioFeriale
       case 'ridotto': return fest ? config.prezzoRidottoFestivo : config.prezzoRidottoFeriale
+      case 'soci': return config.prezzoSoci || 6
       default: return fest ? config.prezzoMezzaFestivo : config.prezzoMezzaFeriale
     }
   }
@@ -162,26 +163,28 @@ export default function Piscina() {
           {/* Tipo ingresso */}
           <div style={{ marginBottom: '1rem' }}>
             <div style={{ fontSize: 13, color: '#666', marginBottom: 8 }}>Tipo di ingresso</div>
-            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
               {[
-                ['giornaliero', '☀️ Giornaliero'],
-                ['mattina', '🌅 Mattina'],
-                ['pomeriggio', '🌇 Pomeriggio'],
-                ['mezza', '🌤 Mezza giornata'],
-                ['ridotto', '👶 Ridotto'],
-              ].map(([t, label]) => (
+                ['giornaliero', '☀️ Giornaliero', ''],
+                ['mattina', '🌅 Mattina', ''],
+                ['pomeriggio', '🌇 Pomeriggio', ''],
+                ['mezza', '🌤 Mezza', ''],
+                ['ridotto', '👶 Ridotto', '6-12 anni · sdraio inclusa'],
+                ['soci', '🤝 Soci', 'tariffa unica'],
+              ].map(([t, label, sub]) => (
                 <button key={t} onClick={() => setTipoIngresso(t)}
                   style={{
-                    padding: '8px 10px', borderRadius: 8, fontSize: 12,
+                    padding: '10px 4px', borderRadius: 8, fontSize: 11,
                     fontWeight: tipoIngresso === t ? 500 : 400,
                     background: tipoIngresso === t ? '#E6F1FB' : 'white',
                     color: tipoIngresso === t ? '#0C447C' : '#666',
                     border: tipoIngresso === t ? '1.5px solid #85B7EB' : '0.5px solid #e0e0dc',
-                    cursor: 'pointer'
+                    cursor: 'pointer', textAlign: 'center'
                   }}>
                   {label}
-                  <div style={{ fontSize: 11, marginTop: 2 }}>
-                    €{getPrezzo(t, festivo)}/persona
+                  {sub && <div style={{ fontSize: 10, marginTop: 1, opacity: 0.75 }}>{sub}</div>}
+                  <div style={{ fontSize: 11, marginTop: 2, fontWeight: 500 }}>
+                    €{getPrezzo(t, festivo)}
                   </div>
                 </button>
               ))}

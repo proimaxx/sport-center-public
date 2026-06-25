@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { esci } from '../firebase/services'
 import { useAuth } from '../hooks/useAuth'
+import logo from '../logo.png'
 
 export default function Header() {
   const user = useAuth()
@@ -19,8 +20,8 @@ export default function Header() {
       position: 'sticky', top: 0, zIndex: 10
     }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }} onClick={() => navigate('/')}>
-        <span style={{ fontSize: 20 }}>🎾</span>
-        <span style={{ fontWeight: 500, fontSize: 16 }}>Sport Center</span>
+        <img src={logo} alt="Tennis Club Le Molette" style={{ height: 38, width: 38, objectFit: 'contain' }} />
+        <span style={{ fontWeight: 500, fontSize: 15 }}>Tennis Club Le Molette</span>
       </div>
       {user && (
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
