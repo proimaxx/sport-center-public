@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 
 const TennisCourt = () => (
-  <svg viewBox="0 0 260 160" style={{ width: '100%', height: 140 }}>
+  <svg viewBox="0 0 260 160" style={{ width: '100%', height: 100 }}>
     <rect width="260" height="160" fill="#C1440E" rx="4"/>
     <rect x="15" y="10" width="230" height="140" fill="#A33A0C"/>
     <rect x="15" y="10" width="230" height="140" fill="none" stroke="white" strokeWidth="2"/>
@@ -19,7 +19,7 @@ const TennisCourt = () => (
 )
 
 const PadelCourt = () => (
-  <svg viewBox="0 0 260 130" style={{ width: '100%', height: 140 }}>
+  <svg viewBox="0 0 260 130" style={{ width: '100%', height: 100 }}>
     {/* Sfondo verde acqua */}
     <rect width="260" height="130" fill="#00897B" rx="4"/>
     {/* Pareti laterali sinistra */}
@@ -41,7 +41,7 @@ const PadelCourt = () => (
 )
 
 const PickleballCourt = () => (
-  <svg viewBox="0 0 260 140" style={{ width: '100%', height: 140 }}>
+  <svg viewBox="0 0 260 140" style={{ width: '100%', height: 100 }}>
     {/* Sfondo campo */}
     <rect width="260" height="140" fill="#1565C0" rx="4"/>
     {/* Campo principale */}
@@ -69,7 +69,7 @@ const PiscinaCourt = () => {
   const corsie = [32, 50, 68, 86, 104]
   const colori = ['#E53935', '#1565C0', '#E53935', '#1565C0']
   return (
-  <svg viewBox="0 0 300 130" style={{ width: '100%', height: 140 }}>
+  <svg viewBox="0 0 300 130" style={{ width: '100%', height: 100 }}>
     <rect width="300" height="130" fill="#E8D5C4" rx="4"/>
     <rect x="12" y="8" width="276" height="114" fill="#29B6F6" rx="3"/>
     <rect x="12" y="8" width="276" height="114" fill="url(#acqua)" rx="3"/>
@@ -93,7 +93,7 @@ const PiscinaCourt = () => {
 }
 
 const CalcioA5Court = () => (
-  <svg viewBox="0 0 260 160" style={{ width: '100%', height: 140 }}>
+  <svg viewBox="0 0 260 160" style={{ width: '100%', height: 100 }}>
     <rect width="260" height="160" fill="#2E7D32" rx="4"/>
     <rect x="12" y="10" width="236" height="140" fill="#1B5E20" rx="2"/>
     <rect x="12" y="10" width="236" height="140" fill="none" stroke="white" strokeWidth="2"/>
@@ -108,7 +108,7 @@ const CalcioA5Court = () => (
 )
 
 const CentriEstiviCourt = () => (
-  <svg viewBox="0 0 260 160" style={{ width: '100%', height: 140 }}>
+  <svg viewBox="0 0 260 160" style={{ width: '100%', height: 100 }}>
     <rect width="260" height="160" fill="#F57C00" rx="4"/>
     <rect x="12" y="10" width="236" height="140" fill="#E65100" rx="2"/>
     <circle cx="130" cy="55" r="28" fill="#FFB300"/>
@@ -149,7 +149,7 @@ export default function Home() {
         <p style={{ color: '#888', fontSize: 15, marginTop: 4 }}>Cosa vuoi prenotare oggi?</p>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
         {sezioni.map(s => (
           <div key={s.sport}
             onClick={() => navigate(s.path)}
@@ -171,10 +171,10 @@ export default function Home() {
               e.currentTarget.style.boxShadow = '0 4px 16px rgba(0,0,0,0.15)'
             }}
           >
-            <s.Court />
-            <div style={{ padding: '14px 16px 18px' }}>
-              <div style={{ fontSize: 18, fontWeight: 600, marginBottom: 3 }}>{s.label}</div>
-              <div style={{ fontSize: 13, opacity: 0.8 }}>{s.descrizione}</div>
+            <s.Court style={{ height: 100 }} />
+            <div style={{ padding: '10px 12px 14px' }}>
+              <div style={{ fontSize: 15, fontWeight: 600, marginBottom: 2 }}>{s.label}</div>
+              <div style={{ fontSize: 12, opacity: 0.8 }}>{s.descrizione}</div>
             </div>
           </div>
         ))}
