@@ -78,6 +78,24 @@ export default function Prenota() {
     })
   }
 
+const creaUnBuco = (campoId, slot, durata) => {
+    const [sh, sm] = slot.split(':').map(Number)
+    const sStart = sh * 60 + sm
+    const prevStart = sStart - 30
+    const [hA, mA] = (config.oraApertura || '08:00').split(':').map(Number)
+    const apertura = hA * 60 + mA
+    if (prevStart < apertura) return false
+    // Blocca solo se esiste una prenotazione che finisce ESATTAMENTE a prevStart
+    // (cioe' il gap tra fine prenotazione e inizio nuovo slot e' esattamente 30 min)
+    return prenotazioni.some(p => {
+      if (p.campoId !== campoId) return false
+      const [ph, pm] = p.orario.split(':').map(Number)
+      const pStart = ph * 60 + pm
+      const pEnd = pStart + p.durataMin
+      return pEnd === prevStart
+    })
+  }
+
   const isSlotNonDisponibile = (slot) => {
     const now = new Date()
     const dataSlot = new Date(`${data}T${slot}:00`)
@@ -234,8 +252,9 @@ export default function Prenota() {
               {slots.map(slot => {
                 const occupato = isSlotOccupato(campo.id, slot, durata)
                 const nonDisp = isSlotNonDisponibile(slot)
+                const buco = !occupato && !nonDisp && creaUnBuco(campo.id, slot, durata)
                 const isSel = selected?.campoId === campo.id && selected?.slot === slot
-                const bloccato = occupato || nonDisp
+                const bloccato = occupato || nonDisp || buco
                 const [sh, sm] = slot.split(':').map(Number)
                 const fineMin = sh * 60 + sm + durata
                 const orarioFine = `${String(Math.floor(fineMin / 60)).padStart(2, '0')}:${String(fineMin % 60).padStart(2, '0')}`
